@@ -4,4 +4,3 @@
    3. make custom project thumbnails
 2. make act 2
 3. host on vercel
-4. make mobile friendly

@@ -7,9 +7,22 @@ import type { MouseEvent } from "react";
 // - `href`: which section id this link targets (must match an `id="..."` on a section).
 // - `scrollProgress`: where inside that section to land, as a fraction of the section's
 //    own height. 0 = top of section, 1 = bottom of section.
+//    Can be a single number, or { mobile, desktop } for per-breakpoint targets.
 // - `offsetPx`: extra pixel nudge after the progress target. Negative = stop short.
-const items = [
-  { label: "work", href: "#work", scrollProgress: 0.544, offsetPx: 0 },
+type ScrollTarget = number | { mobile: number; desktop: number };
+
+const items: {
+  label: string;
+  href: string;
+  scrollProgress: ScrollTarget;
+  offsetPx: number;
+}[] = [
+  {
+    label: "work",
+    href: "#work",
+    scrollProgress: { mobile: 0.341, desktop: 0.38 },
+    offsetPx: 0,
+  },
   { label: "about", href: "#about", scrollProgress: 0, offsetPx: 0 },
 ];
 
@@ -18,16 +31,29 @@ const ease = [0.22, 1, 0.36, 1] as const;
 function handleClick(
   e: MouseEvent<HTMLAnchorElement>,
   href: string,
-  scrollProgress: number,
+  scrollProgress: ScrollTarget,
   offsetPx: number,
 ) {
   const id = href.replace(/^#/, "");
-  const el = document.getElementById(id);
+  // Some sections (e.g. Act3) render two copies for mobile and desktop, both
+  // with the same id. Find the one that's actually visible.
+  const candidates = document.querySelectorAll<HTMLElement>(`[id="${id}"]`);
+  const el =
+    Array.from(candidates).find(
+      (node) => node.getBoundingClientRect().height > 0,
+    ) ?? candidates[0];
   if (!el) return;
   e.preventDefault();
+  const isMobile = window.innerWidth < 768;
+  const progress =
+    typeof scrollProgress === "number"
+      ? scrollProgress
+      : isMobile
+        ? scrollProgress.mobile
+        : scrollProgress.desktop;
   const rect = el.getBoundingClientRect();
   const sectionTop = rect.top + window.scrollY;
-  const top = sectionTop + rect.height * scrollProgress + offsetPx;
+  const top = sectionTop + rect.height * progress + offsetPx;
   window.scrollTo({ top, behavior: "smooth" });
   history.replaceState(null, "", href);
 }

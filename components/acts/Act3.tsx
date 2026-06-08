@@ -25,7 +25,7 @@ const LETTERS: LetterConfig[] = [
   // { char: "R", from: "left", start: 0.17, end: 0.52 },
   // { char: "K", from: "left", start: 0.23, end: 0.59 },
   { char: "W", from: "right", start: 0.04, end: 0.2 },
-  { char: "O", from: "right", start: 0.11, end: 0.24 },
+  { char: "O", from: "right", start: 0.11, end: 0.22 },
   { char: "R", from: "left", start: 0.17, end: 0.3 },
   { char: "K", from: "left", start: 0.2, end: 0.32 },
 ];
@@ -214,6 +214,47 @@ function MobileProjectCard({ project }: { project: Project }) {
   );
 }
 
+const VIEW_ALL_COUNT = 10;
+
+function ViewAllPill({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href="#"
+      style={{ boxShadow: "0 8px 24px rgba(15, 14, 20, 0.10)" }}
+      className={`inline-flex items-center gap-1 rounded-full border border-fg/30 bg-bg px-8 py-4 font-body font-medium text-fg transition-all hover:border-fg hover:shadow-[0_12px_32px_rgba(15,14,20,0.14)] md:px-8 md:py-4 ${className}`}
+    >
+      View all
+      <span className="tabular-nums text-fg">({VIEW_ALL_COUNT})</span>
+    </a>
+  );
+}
+
+function DesktopViewAllPill({ progress }: { progress: MotionValue<number> }) {
+  const opacity = useTransform(progress, [0.8, 0.87, 1], [0, 1, 1]);
+  const y = useTransform(progress, [0.8, 0.87], ["20px", "0px"]);
+  return (
+    <motion.div
+      style={{ opacity, y }}
+      className="pointer-events-auto absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+    >
+      <ViewAllPill />
+    </motion.div>
+  );
+}
+
+function MobileViewAllPill({ progress }: { progress: MotionValue<number> }) {
+  const opacity = useTransform(progress, [0.7, 0.8, 1], [0, 1, 1]);
+  const y = useTransform(progress, [0.7, 0.8], ["16px", "0px"]);
+  return (
+    <motion.div
+      style={{ opacity, y }}
+      className="pointer-events-auto absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+    >
+      <ViewAllPill />
+    </motion.div>
+  );
+}
+
 export function Act3() {
   const desktopRef = useRef<HTMLElement>(null);
   const mobileRef = useRef<HTMLElement>(null);
@@ -235,6 +276,7 @@ export function Act3() {
       >
         <div className="pointer-events-none absolute inset-0">
           <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
+            <MobileViewAllPill progress={mobileProgress} />
             <h2
               className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
               style={{
@@ -259,6 +301,7 @@ export function Act3() {
       </section>
 
       <section
+        id="work"
         ref={desktopRef}
         className="relative hidden h-[900vh] w-full md:block"
         aria-hidden
@@ -288,6 +331,7 @@ export function Act3() {
                   progress={scrollYProgress}
                 />
               ))}
+              <DesktopViewAllPill progress={scrollYProgress} />
             </div>
           </div>
         </div>
