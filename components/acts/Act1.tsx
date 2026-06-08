@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { AnimatedName } from "@/components/AnimatedName";
+import { Nav } from "@/components/Nav";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const EMAIL = "contact@szejason.com";
@@ -27,7 +28,7 @@ function MailCopy() {
       type="button"
       onClick={handleClick}
       aria-label={copied ? "Email copied" : "Copy email"}
-      className="relative flex h-[18px] items-center text-fg-muted hover:text-fg transition-colors"
+      className="relative -m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-[18px] md:w-auto md:justify-start"
     >
       <AnimatePresence mode="wait" initial={false}>
         {copied ? (
@@ -112,6 +113,7 @@ const socials = [
 export function Act1() {
   return (
     <section className="relative flex h-screen w-full flex-col">
+      <Nav />
       <div className="flex flex-1 items-end px-[6vw] pb-0">
         <AnimatedName />
       </div>
@@ -125,8 +127,8 @@ export function Act1() {
         style={{ background: "var(--rule)" }}
       />
 
-      <div className="flex flex-1 items-start px-[6vw] pt-4">
-        <div className="flex w-full items-start justify-between text-sm text-fg-muted">
+      <div className="flex flex-1 items-start px-[6vw] pt-3 md:pt-4">
+        <div className="flex w-full flex-col items-start gap-3 text-sm text-fg-muted md:flex-row md:items-start md:justify-between md:gap-6">
           <motion.span
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -138,14 +140,14 @@ export function Act1() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 1.55, ease }}
-            className="flex items-center gap-5"
+            className="-ml-[5px] flex flex-wrap items-center gap-x-2 gap-y-2 md:ml-0 md:gap-5"
           >
             <a
               href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Resume"
-              className="text-fg-muted hover:text-fg transition-colors"
+              className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-auto md:w-auto"
             >
               <svg
                 width="18"
@@ -172,7 +174,7 @@ export function Act1() {
                 aria-label={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-fg-muted hover:text-fg transition-colors"
+                className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-auto md:w-auto"
               >
                 {icon}
               </a>

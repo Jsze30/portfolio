@@ -188,6 +188,7 @@ export function Act4() {
 
   return (
     <section
+      id="about"
       className="relative flex min-h-screen w-full items-center justify-center px-6"
       style={{ paddingTop: "12vh", paddingBottom: "8vh" }}
     >
@@ -233,7 +234,7 @@ export function Act4() {
 
         <motion.div
           variants={variantsItem}
-          className="mt-14 grid grid-flow-col grid-rows-2 justify-center gap-x-10 gap-y-4 text-sm"
+          className="mx-auto mt-10 grid w-max max-w-full grid-flow-col grid-cols-2 grid-rows-3 justify-center gap-x-18 gap-y-3 text-sm md:mt-14 md:w-auto md:grid-cols-none md:grid-rows-2 md:gap-x-10 md:gap-y-4"
           style={{ fontWeight: 500 }}
         >
           <a
@@ -241,30 +242,42 @@ export function Act4() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Resume"
-            className="inline-flex items-center gap-2 justify-self-start text-fg-muted hover:text-fg transition-colors"
+            className="order-1 inline-flex items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none"
           >
             <span className="flex h-[18px] w-[18px] items-center justify-center">
               {ResumeIcon}
             </span>
             <span>Resume</span>
           </a>
-          <MailCopy />
+          <div className="order-3 inline-flex items-center justify-self-start md:order-none">
+            <MailCopy />
+          </div>
           {LINKS.filter(({ label }) => label !== "Resume").map(
-            ({ label, handle, href, icon }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="inline-flex items-center gap-2 justify-self-start text-fg-muted hover:text-fg transition-colors"
-              >
-                <span className="flex h-[18px] w-[18px] items-center justify-center">
-                  {icon}
-                </span>
-                <span>{handle}</span>
-              </a>
-            ),
+            ({ label, handle, href, icon }) => {
+              const mobileOrder =
+                label === "GitHub"
+                  ? "order-2"
+                  : label === "LinkedIn"
+                    ? "order-4"
+                    : label === "X (Twitter)"
+                      ? "order-5"
+                      : "order-6";
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className={`${mobileOrder} inline-flex items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none`}
+                >
+                  <span className="flex h-[18px] w-[18px] items-center justify-center">
+                    {icon}
+                  </span>
+                  <span>{handle}</span>
+                </a>
+              );
+            },
           )}
         </motion.div>
 

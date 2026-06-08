@@ -20,10 +20,14 @@ type LetterConfig = {
 };
 
 const LETTERS: LetterConfig[] = [
-  { char: "W", from: "right", start: 0.04, end: 0.42 },
-  { char: "O", from: "right", start: 0.11, end: 0.46 },
-  { char: "R", from: "left", start: 0.17, end: 0.52 },
-  { char: "K", from: "left", start: 0.23, end: 0.59 },
+  // { char: "W", from: "right", start: 0.04, end: 0.42 },
+  // { char: "O", from: "right", start: 0.11, end: 0.46 },
+  // { char: "R", from: "left", start: 0.17, end: 0.52 },
+  // { char: "K", from: "left", start: 0.23, end: 0.59 },
+  { char: "W", from: "right", start: 0.04, end: 0.2 },
+  { char: "O", from: "right", start: 0.11, end: 0.24 },
+  { char: "R", from: "left", start: 0.17, end: 0.3 },
+  { char: "K", from: "left", start: 0.2, end: 0.32 },
 ];
 
 type CardWindow = {
@@ -33,10 +37,10 @@ type CardWindow = {
 };
 
 const CARD_WINDOWS: CardWindow[] = [
-  { side: "left", start: 0.59, end: 0.73 },
-  { side: "right", start: 0.65, end: 0.79 },
-  { side: "left", start: 0.71, end: 0.86 },
-  { side: "right", start: 0.77, end: 0.92 },
+  { side: "left", start: 0.32, end: 0.57 },
+  { side: "right", start: 0.43, end: 0.67 },
+  { side: "left", start: 0.53, end: 0.8 },
+  { side: "right", start: 0.64, end: 0.9 },
 ];
 
 function Letter({
@@ -149,43 +153,145 @@ function ProjectCard({
   );
 }
 
+function MobileProjectCard({ project }: { project: Project }) {
+  return (
+    <a
+      href={project.links.live ?? project.links.github ?? "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex w-full flex-col gap-3"
+    >
+      <div
+        className="relative w-full overflow-hidden"
+        style={{
+          aspectRatio: "4 / 3",
+          borderRadius: "16px",
+          boxShadow: "0 18px 50px rgba(15, 14, 20, 0.10)",
+          background: "var(--rule)",
+        }}
+      >
+        <Image
+          src={project.screenshot}
+          alt={project.title}
+          fill
+          sizes="88vw"
+          className="object-cover"
+          priority={false}
+        />
+      </div>
+
+      <div className="flex w-full items-baseline justify-between gap-3">
+        <div className="flex min-w-0 items-baseline gap-3">
+          <span
+            className="font-display tabular-nums text-fg-muted"
+            style={{ fontSize: "0.95rem", letterSpacing: "-0.02em" }}
+          >
+            {project.id}
+          </span>
+          <h3
+            className="min-w-0 truncate font-display font-medium text-fg"
+            style={{
+              fontSize: "clamp(1.25rem, 5vw, 1.75rem)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+            }}
+          >
+            {project.title}
+          </h3>
+        </div>
+        <span
+          className="shrink-0 uppercase text-fg-muted"
+          style={{
+            fontSize: "10px",
+            letterSpacing: "0.16em",
+            fontWeight: 500,
+          }}
+        >
+          {project.category}
+        </span>
+      </div>
+    </a>
+  );
+}
+
 export function Act3() {
-  const ref = useRef<HTMLElement>(null);
+  const desktopRef = useRef<HTMLElement>(null);
+  const mobileRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: desktopRef,
+    offset: ["start end", "end start"],
+  });
+  const { scrollYProgress: mobileProgress } = useScroll({
+    target: mobileRef,
     offset: ["start end", "end start"],
   });
 
   return (
-    <section ref={ref} className="relative h-[900vh] w-full">
-      <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-        <h2
-          className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
-          style={{
-            fontSize: "32vw",
-            letterSpacing: "-0.04em",
-            fontOpticalSizing: "auto",
-          }}
-        >
-          <span className="sr-only">Work</span>
-          {LETTERS.map((letter, i) => (
-            <Letter key={i} config={letter} progress={scrollYProgress} />
-          ))}
-        </h2>
-
-        <div className="pointer-events-none absolute inset-0 z-10">
-          <div className="pointer-events-auto relative mx-auto h-full w-full">
-            {projects.map((project, i) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                window={CARD_WINDOWS[i]}
-                progress={scrollYProgress}
-              />
-            ))}
+    <>
+      <section
+        id="work"
+        ref={mobileRef}
+        className="relative block w-full md:hidden"
+      >
+        <div className="pointer-events-none absolute inset-0">
+          <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
+            <h2
+              className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
+              style={{
+                fontSize: "32vw",
+                letterSpacing: "-0.04em",
+                fontOpticalSizing: "auto",
+              }}
+            >
+              <span className="sr-only">Work</span>
+              {LETTERS.map((letter, i) => (
+                <Letter key={i} config={letter} progress={mobileProgress} />
+              ))}
+            </h2>
           </div>
         </div>
-      </div>
-    </section>
+
+        <div className="relative z-10 flex flex-col gap-6 px-[6vw] pt-[150vh] pb-[100vh]">
+          {projects.map((project) => (
+            <MobileProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      </section>
+
+      <section
+        ref={desktopRef}
+        className="relative hidden h-[900vh] w-full md:block"
+        aria-hidden
+      >
+        <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
+          <h2
+            className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
+            style={{
+              fontSize: "32vw",
+              letterSpacing: "-0.04em",
+              fontOpticalSizing: "auto",
+            }}
+          >
+            <span className="sr-only">Work</span>
+            {LETTERS.map((letter, i) => (
+              <Letter key={i} config={letter} progress={scrollYProgress} />
+            ))}
+          </h2>
+
+          <div className="pointer-events-none absolute inset-0 z-10">
+            <div className="pointer-events-auto relative mx-auto h-full w-full">
+              {projects.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  window={CARD_WINDOWS[i]}
+                  progress={scrollYProgress}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
