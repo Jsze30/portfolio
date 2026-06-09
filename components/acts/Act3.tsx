@@ -275,11 +275,11 @@ export function Act3() {
   const mobileRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: desktopRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
   const { scrollYProgress: mobileProgress } = useScroll({
     target: mobileRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
 
   return (
@@ -287,7 +287,7 @@ export function Act3() {
       <section
         id="work"
         ref={mobileRef}
-        className="relative block w-full md:hidden"
+        className="relative z-0 -mt-[180vh] block w-full md:hidden"
       >
         <div className="pointer-events-none absolute inset-0">
           <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
@@ -318,7 +318,7 @@ export function Act3() {
       <section
         id="work"
         ref={desktopRef}
-        className="relative hidden h-[900vh] w-full md:block"
+        className="relative z-0 hidden h-[900vh] w-full md:-mt-[200vh] md:block"
         aria-hidden
       >
         <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">

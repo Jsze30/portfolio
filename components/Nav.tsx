@@ -21,7 +21,7 @@ const items: {
   {
     label: "work",
     href: "#work",
-    scrollProgress: { mobile: 0.341, desktop: 0.38 },
+    scrollProgress: { mobile: 0.341, desktop: 0.39 },
     offsetPx: 0,
   },
   { label: "contact", href: "#contact", scrollProgress: 0, offsetPx: 0 },
