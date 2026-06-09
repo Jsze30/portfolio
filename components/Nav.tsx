@@ -17,13 +17,14 @@ const items: {
   scrollProgress: ScrollTarget;
   offsetPx: number;
 }[] = [
+  { label: "about", href: "#about", scrollProgress: 0.3, offsetPx: 0 },
   {
     label: "work",
     href: "#work",
     scrollProgress: { mobile: 0.341, desktop: 0.38 },
     offsetPx: 0,
   },
-  { label: "about", href: "#about", scrollProgress: 0, offsetPx: 0 },
+  { label: "contact", href: "#contact", scrollProgress: 0, offsetPx: 0 },
 ];
 
 const ease = [0.22, 1, 0.36, 1] as const;

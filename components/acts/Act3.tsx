@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -20,10 +20,6 @@ type LetterConfig = {
 };
 
 const LETTERS: LetterConfig[] = [
-  // { char: "W", from: "right", start: 0.04, end: 0.42 },
-  // { char: "O", from: "right", start: 0.11, end: 0.46 },
-  // { char: "R", from: "left", start: 0.17, end: 0.52 },
-  // { char: "K", from: "left", start: 0.23, end: 0.59 },
   { char: "W", from: "right", start: 0.04, end: 0.2 },
   { char: "O", from: "right", start: 0.11, end: 0.22 },
   { char: "R", from: "left", start: 0.17, end: 0.3 },
@@ -96,7 +92,7 @@ function ProjectCard({
       target="_blank"
       rel="noopener noreferrer"
       style={{ y }}
-      className={`group absolute top-0 flex w-[48vw] max-w-[640px] flex-col gap-5 will-change-transform ${sideClass}`}
+      className={`group absolute top-0 flex w-[48vw] flex-col gap-[1.04vw] will-change-transform ${sideClass}`}
     >
       <motion.div
         whileHover={{ scale: 1.02, y: -8 }}
@@ -104,8 +100,8 @@ function ProjectCard({
         className="relative w-full overflow-hidden"
         style={{
           aspectRatio: "4 / 3",
-          borderRadius: "24px",
-          boxShadow: "0 30px 80px rgba(15, 14, 20, 0.10)",
+          borderRadius: "1.67vw",
+          boxShadow: "0 2.08vw 5.56vw rgba(15, 14, 20, 0.10)",
           background: "var(--rule)",
         }}
       >
@@ -119,18 +115,18 @@ function ProjectCard({
         />
       </motion.div>
 
-      <div className="flex w-full items-baseline justify-between gap-6">
-        <div className="flex items-baseline gap-4">
+      <div className="flex w-full items-baseline justify-between gap-[1.25vw]">
+        <div className="flex items-baseline gap-[0.83vw]">
           <span
             className="font-display tabular-nums text-fg-muted"
-            style={{ fontSize: "1.1rem", letterSpacing: "-0.02em" }}
+            style={{ fontSize: "1.15vw", letterSpacing: "-0.02em" }}
           >
             {project.id}
           </span>
           <h3
             className="font-display font-medium text-fg"
             style={{
-              fontSize: "clamp(1.5rem, 2.4vw, 2.25rem)",
+              fontSize: "2.4vw",
               letterSpacing: "-0.02em",
               lineHeight: 1,
             }}
@@ -141,7 +137,7 @@ function ProjectCard({
         <span
           className="shrink-0 uppercase text-fg-muted"
           style={{
-            fontSize: "11px",
+            fontSize: "0.76vw",
             letterSpacing: "0.18em",
             fontWeight: 500,
           }}
@@ -217,15 +213,34 @@ function MobileProjectCard({ project }: { project: Project }) {
 const VIEW_ALL_COUNT = 10;
 
 function ViewAllPill({ className = "" }: { className?: string }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    if (!showTooltip) return;
+    const timer = setTimeout(() => setShowTooltip(false), 2000);
+    return () => clearTimeout(timer);
+  }, [showTooltip]);
+
   return (
-    <a
-      href="#"
-      style={{ boxShadow: "0 8px 24px rgba(15, 14, 20, 0.10)" }}
-      className={`inline-flex items-center gap-1 rounded-full border border-fg/30 bg-bg px-8 py-4 font-body font-medium text-fg transition-all hover:border-fg hover:shadow-[0_12px_32px_rgba(15,14,20,0.14)] md:px-8 md:py-4 ${className}`}
-    >
-      View all
-      <span className="tabular-nums text-fg">({VIEW_ALL_COUNT})</span>
-    </a>
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setShowTooltip(true)}
+        style={{ boxShadow: "0 8px 24px rgba(15, 14, 20, 0.10)" }}
+        className={`inline-flex items-center gap-1 rounded-full border border-fg/30 bg-bg px-8 py-4 font-body font-medium text-fg transition-all hover:border-fg hover:shadow-[0_12px_32px_rgba(15,14,20,0.14)] md:px-8 md:py-4 ${className}`}
+      >
+        View all
+        <span className="tabular-nums text-fg">({VIEW_ALL_COUNT})</span>
+      </button>
+      {showTooltip && (
+        <div
+          role="status"
+          className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-fg px-3 py-1.5 text-xs font-medium text-bg shadow-lg"
+        >
+          Work in progress
+        </div>
+      )}
+    </div>
   );
 }
 

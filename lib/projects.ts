@@ -44,7 +44,7 @@ export const projects: Project[] = [
     tags: ["Next.js", "Supabase", "OpenAI"],
     screenshot: "/content_scheduler.png",
     links: {
-      live: "https://content-scheduler-eight.vercel.app/",
+      live: "https://github.com/Jsze30/content_scheduler",
       github: "https://github.com/Jsze30/content_scheduler",
     },
   },

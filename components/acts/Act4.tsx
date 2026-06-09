@@ -188,7 +188,7 @@ export function Act4() {
 
   return (
     <section
-      id="about"
+      id="contact"
       className="relative flex min-h-screen w-full items-center justify-center px-6"
       style={{ paddingTop: "12vh", paddingBottom: "8vh" }}
     >
