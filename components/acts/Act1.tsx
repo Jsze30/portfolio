@@ -27,7 +27,7 @@ function MailCopy() {
       type="button"
       onClick={handleClick}
       aria-label={copied ? "Email copied" : "Copy email"}
-      className="relative -m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-[18px] md:w-auto md:justify-start"
+      className="relative -m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-[38px] md:w-[38px]"
     >
       <AnimatePresence mode="wait" initial={false}>
         {copied ? (
@@ -139,14 +139,14 @@ export function Act1() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 1.55, ease }}
-            className="-ml-[5px] flex flex-wrap items-center gap-x-2 gap-y-2 md:ml-0 md:gap-5"
+            className="-ml-[5px] flex flex-wrap items-center gap-x-2 gap-y-2 md:-mt-2 md:ml-0 md:gap-0"
           >
             <a
               href={RESUME_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Resume"
-              className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-auto md:w-auto"
+              className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-[38px] md:w-[38px]"
             >
               <svg
                 width="18"
@@ -173,7 +173,7 @@ export function Act1() {
                 aria-label={label}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-auto md:w-auto"
+                className="-m-2 inline-flex h-11 w-11 items-center justify-center text-fg-muted transition-colors hover:text-fg md:m-0 md:h-[38px] md:w-[38px]"
               >
                 {icon}
               </a>

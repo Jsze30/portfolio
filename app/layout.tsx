@@ -17,6 +17,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
+import { MagneticTrail } from "@/components/MagneticTrail";
 
 // TODO: Swap to Mriya Grotesk once licensed.
 // import localFont from "next/font/local";
@@ -137,6 +138,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${display.variable} ${mono.variable} ${previewFontVars}`}>
       <body>
+        <MagneticTrail />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

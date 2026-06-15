@@ -61,7 +61,7 @@ function handleClick(
 
 export function Nav() {
   return (
-    <nav className="absolute top-10 right-[6vw] z-50 flex flex-col items-start gap-1 text-sm md:top-[6vw]">
+    <nav data-no-cursor className="absolute top-10 right-[6vw] z-50 flex flex-col items-start gap-1 text-sm md:top-[6vw]">
       {items.map((item, i) => (
         <motion.div
           key={item.label}

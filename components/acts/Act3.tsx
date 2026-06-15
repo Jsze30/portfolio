@@ -91,6 +91,7 @@ function ProjectCard({
       href={project.links.live ?? project.links.github ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
+      data-no-cursor
       style={{ y }}
       className={`group absolute top-0 flex w-[48vw] flex-col gap-[1.04vw] will-change-transform ${sideClass}`}
     >
@@ -155,6 +156,7 @@ function MobileProjectCard({ project }: { project: Project }) {
       href={project.links.live ?? project.links.github ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
+      data-no-cursor
       className="group flex w-full flex-col gap-3"
     >
       <div
@@ -225,6 +227,7 @@ function ViewAllPill({ className = "" }: { className?: string }) {
     <div className="relative inline-block">
       <button
         type="button"
+        data-no-cursor
         onClick={() => setShowTooltip(true)}
         style={{ boxShadow: "0 8px 24px rgba(15, 14, 20, 0.10)" }}
         className={`inline-flex items-center gap-1 rounded-full border border-fg/30 bg-bg px-8 py-4 font-body font-medium text-fg transition-all hover:border-fg hover:shadow-[0_12px_32px_rgba(15,14,20,0.14)] md:px-8 md:py-4 ${className}`}

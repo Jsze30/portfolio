@@ -233,7 +233,7 @@ export function Act4() {
 
         <motion.div
           variants={variantsItem}
-          className="mx-auto mt-10 grid w-max max-w-full grid-flow-col grid-cols-2 grid-rows-3 justify-center gap-x-18 gap-y-3 text-sm md:mt-14 md:w-auto md:grid-cols-none md:grid-rows-2 md:gap-x-10 md:gap-y-4"
+          className="mx-auto mt-10 grid w-max max-w-full grid-flow-col grid-cols-2 grid-rows-3 justify-center gap-x-18 gap-y-0 text-sm md:mt-14 md:w-auto md:grid-cols-none md:grid-rows-2 md:gap-x-10 md:gap-y-0"
           style={{ fontWeight: 500 }}
         >
           <a
@@ -241,14 +241,14 @@ export function Act4() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Resume"
-            className="order-1 inline-flex items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none"
+            className="order-1 inline-flex h-[30px] items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none md:h-[34px]"
           >
             <span className="flex h-[18px] w-[18px] items-center justify-center">
               {ResumeIcon}
             </span>
             <span>Resume</span>
           </a>
-          <div className="order-3 inline-flex items-center justify-self-start md:order-none">
+          <div className="order-3 inline-flex h-[30px] items-center justify-self-start md:order-none md:h-[34px]">
             <MailCopy />
           </div>
           {LINKS.filter(({ label }) => label !== "Resume").map(
@@ -268,7 +268,7 @@ export function Act4() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className={`${mobileOrder} inline-flex items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none`}
+                  className={`${mobileOrder} inline-flex h-[30px] items-center gap-2 justify-self-start text-fg-muted transition-colors hover:text-fg md:order-none md:h-[34px]`}
                 >
                   <span className="flex h-[18px] w-[18px] items-center justify-center">
                     {icon}
