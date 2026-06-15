@@ -7,8 +7,7 @@ import { Nav } from "@/components/Nav";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const EMAIL = "contact@szejason.com";
-const RESUME_URL =
-  "https://drive.google.com/file/d/1aRGOhivNkYGcce6nQMHwhO9SypxYS131/view?usp=sharing";
+const RESUME_URL = "/Jason_Sze_Resume.pdf";
 
 function MailCopy() {
   const [copied, setCopied] = useState(false);
