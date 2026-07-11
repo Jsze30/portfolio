@@ -2,13 +2,22 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import {
   motion,
+  useReducedMotion,
   useScroll,
   useTransform,
   type MotionValue,
 } from "motion/react";
 import { projects, type Project } from "@/lib/projects";
+import { scrollToImmediate } from "@/components/SmoothScroll";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+const featured = projects.filter((p) => p.featured);
+const featuredDisplayId = (index: number) =>
+  String(index + 1).padStart(2, "0");
 
 type Direction = "left" | "right";
 
@@ -72,10 +81,12 @@ function Letter({
 
 function ProjectCard({
   project,
+  displayId,
   window: w,
   progress,
 }: {
   project: Project;
+  displayId: string;
   window: CardWindow;
   progress: MotionValue<number>;
 }) {
@@ -88,7 +99,7 @@ function ProjectCard({
 
   return (
     <motion.a
-      href={project.links.live ?? project.links.github ?? "#"}
+      href={project.links.primary ?? project.links.github ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
       data-no-cursor
@@ -122,7 +133,7 @@ function ProjectCard({
             className="font-display tabular-nums text-fg-muted"
             style={{ fontSize: "1.15vw", letterSpacing: "-0.02em" }}
           >
-            {project.id}
+            {displayId}
           </span>
           <h3
             className="font-display font-medium text-fg"
@@ -150,10 +161,16 @@ function ProjectCard({
   );
 }
 
-function MobileProjectCard({ project }: { project: Project }) {
+function MobileProjectCard({
+  project,
+  displayId,
+}: {
+  project: Project;
+  displayId: string;
+}) {
   return (
     <a
-      href={project.links.live ?? project.links.github ?? "#"}
+      href={project.links.primary ?? project.links.github ?? "#"}
       target="_blank"
       rel="noopener noreferrer"
       data-no-cursor
@@ -184,7 +201,7 @@ function MobileProjectCard({ project }: { project: Project }) {
             className="font-display tabular-nums text-fg-muted"
             style={{ fontSize: "0.95rem", letterSpacing: "-0.02em" }}
           >
-            {project.id}
+            {displayId}
           </span>
           <h3
             className="min-w-0 truncate font-display font-medium text-fg"
@@ -212,37 +229,79 @@ function MobileProjectCard({ project }: { project: Project }) {
   );
 }
 
-const VIEW_ALL_COUNT = 10;
+type WipeRect = { top: number; left: number; width: number; height: number };
 
 function ViewAllPill({ className = "" }: { className?: string }) {
-  const [showTooltip, setShowTooltip] = useState(false);
+  const router = useRouter();
+  const reduce = useReducedMotion();
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [wipe, setWipe] = useState<WipeRect | null>(null);
 
   useEffect(() => {
-    if (!showTooltip) return;
-    const timer = setTimeout(() => setShowTooltip(false), 2000);
-    return () => clearTimeout(timer);
-  }, [showTooltip]);
+    router.prefetch("/work");
+  }, [router]);
+
+  const handleClick = () => {
+    if (reduce || !btnRef.current) {
+      router.push("/work", { scroll: false });
+      return;
+    }
+    const r = btnRef.current.getBoundingClientRect();
+    setWipe({ top: r.top, left: r.left, width: r.width, height: r.height });
+  };
 
   return (
     <div className="relative inline-block">
       <button
+        ref={btnRef}
         type="button"
         data-no-cursor
-        onClick={() => setShowTooltip(true)}
+        data-view-all-pill
+        onClick={handleClick}
         style={{ boxShadow: "0 8px 24px rgba(15, 14, 20, 0.10)" }}
         className={`inline-flex items-center gap-1 rounded-full border border-fg/30 bg-bg px-8 py-4 font-body font-medium text-fg transition-all hover:border-fg hover:shadow-[0_12px_32px_rgba(15,14,20,0.14)] md:px-8 md:py-4 ${className}`}
       >
         View all
-        <span className="tabular-nums text-fg">({VIEW_ALL_COUNT})</span>
+        <span className="tabular-nums text-fg">({projects.length})</span>
       </button>
-      {showTooltip && (
-        <div
-          role="status"
-          className="pointer-events-none absolute left-1/2 top-full z-30 mt-2 -translate-x-1/2 whitespace-nowrap rounded-md bg-fg px-3 py-1.5 text-xs font-medium text-bg shadow-lg"
-        >
-          Work in progress
-        </div>
-      )}
+      {wipe &&
+        createPortal(
+          <motion.div
+            className="fixed z-[9998]"
+            style={{
+              background: "var(--bg)",
+              borderStyle: "solid",
+              borderWidth: 2,
+            }}
+            initial={{
+              top: wipe.top,
+              left: wipe.left,
+              width: wipe.width,
+              height: wipe.height,
+              borderRadius: 999,
+              borderColor: "rgba(15, 14, 20, 0.65)",
+            }}
+            animate={{
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              borderRadius: 0,
+              borderColor: [
+                "rgba(15, 14, 20, 0.65)",
+                "rgba(15, 14, 20, 0.65)",
+                "rgba(15, 14, 20, 0)",
+              ],
+            }}
+            transition={{
+              duration: 0.25,
+              ease: EASE,
+              borderColor: { duration: 0.24, times: [0, 0.8, 1] },
+            }}
+            onAnimationComplete={() => router.push("/work", { scroll: false })}
+          />,
+          document.body,
+        )}
     </div>
   );
 }
@@ -263,10 +322,16 @@ function DesktopViewAllPill({ progress }: { progress: MotionValue<number> }) {
 function MobileViewAllPill({ progress }: { progress: MotionValue<number> }) {
   const opacity = useTransform(progress, [0.7, 0.8, 1], [0, 1, 1]);
   const y = useTransform(progress, [0.7, 0.8], ["16px", "0px"]);
+  // Only capture taps once the pill is actually visible — otherwise the
+  // invisible pill (which now sits above the cards) would swallow taps on
+  // cards scrolling through the viewport centre.
+  const pointerEvents = useTransform(opacity, (o) =>
+    o > 0.5 ? "auto" : "none",
+  );
   return (
     <motion.div
-      style={{ opacity, y }}
-      className="pointer-events-auto absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 will-change-transform"
+      style={{ opacity, y, pointerEvents }}
+      className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 will-change-transform"
     >
       <ViewAllPill />
     </motion.div>
@@ -285,6 +350,92 @@ export function Act3() {
     offset: ["start start", "end end"],
   });
 
+  // Returning from /work: the exact reverse of the pill's expansion wipe.
+  // The overlay mounts already covering the viewport (lazy initializer, so
+  // it's there on the very first paint and the route swap is never visible),
+  // then collapses into the pill once the scroll jump below has settled.
+  const [returnWipe, setReturnWipe] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      sessionStorage.getItem("return-wipe") === "1",
+  );
+  const [returnTarget, setReturnTarget] = useState<WipeRect | null>(null);
+  // Collapse finished — cross-fade the overlay out so the faux pill dissolves
+  // into the real one instead of hard-cutting.
+  const [returnDone, setReturnDone] = useState(false);
+  // Whether this mount is a return-from-work. Stays true for the whole
+  // sequence (unlike `returnWipe`, which flips off when the overlay unmounts)
+  // so the WORK text stays hidden until we explicitly reveal it.
+  const [isReturn] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      sessionStorage.getItem("return-wipe") === "1",
+  );
+  // Flips true only after the pill is fully shown, so the WORK text fades in
+  // from the pill outwards *after* the collapse rather than during it.
+  const [revealText, setRevealText] = useState(false);
+  // The sessionStorage flags are one-shot, but React's dev double-mount runs
+  // this effect twice — cache them in a ref on first read so the second run
+  // still knows to jump/collapse instead of finding the flags already cleared.
+  const returnFlags = useRef<{ scroll: boolean; wipe: boolean } | null>(null);
+
+  // Returning from /work: jump straight to the "View all" pill moment.
+  useEffect(() => {
+    if (!returnFlags.current) {
+      returnFlags.current = {
+        scroll: sessionStorage.getItem("scroll-to-pill") === "1",
+        wipe: sessionStorage.getItem("return-wipe") === "1",
+      };
+      sessionStorage.removeItem("scroll-to-pill");
+      sessionStorage.removeItem("return-wipe");
+    }
+    if (!returnFlags.current.scroll) return;
+    const doReturn = returnFlags.current.wipe;
+
+    const jump = () => {
+      const isMobile = window.innerWidth < 768;
+      const el = isMobile ? mobileRef.current : desktopRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const top = rect.top + window.scrollY;
+      const progress = isMobile ? 0.97 : 0.93;
+      scrollToImmediate(top + (rect.height - window.innerHeight) * progress);
+    };
+
+    // Jump now, then re-apply next frame in case layout settles after mount.
+    jump();
+    const raf = requestAnimationFrame(jump);
+
+    if (!doReturn) return () => cancelAnimationFrame(raf);
+
+    // Only measure the pill (and start the collapse) once the jump AND the
+    // sticky pinning have fully settled — measuring mid-settle captures the
+    // pill lower than its final resting spot, so the overlay would land below
+    // the real pill. The short hold also softens the reveal's start.
+    const timer = setTimeout(() => {
+      jump();
+      const pill = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-view-all-pill]"),
+      ).find((el) => el.getBoundingClientRect().width > 0);
+      if (!pill) {
+        setReturnWipe(false);
+        return;
+      }
+      const r = pill.getBoundingClientRect();
+      setReturnTarget({
+        top: r.top,
+        left: r.left,
+        width: r.width,
+        height: r.height,
+      });
+    }, 90);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
+  }, []);
+
   return (
     <>
       <section
@@ -294,27 +445,69 @@ export function Act3() {
       >
         <div className="pointer-events-none absolute inset-0">
           <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-            <MobileViewAllPill progress={mobileProgress} />
-            <h2
-              className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
-              style={{
-                fontSize: "32vw",
-                letterSpacing: "-0.04em",
-                fontOpticalSizing: "auto",
-              }}
+            <motion.div
+              className="w-full"
+              style={{ willChange: "clip-path, opacity" }}
+              initial={
+                isReturn
+                  ? {
+                      clipPath: "circle(0% at 50% 50%)",
+                      WebkitClipPath: "circle(0% at 50% 50%)",
+                      opacity: 0,
+                    }
+                  : false
+              }
+              animate={
+                isReturn
+                  ? revealText
+                    ? {
+                        clipPath: "circle(150% at 50% 50%)",
+                        WebkitClipPath: "circle(150% at 50% 50%)",
+                        opacity: 1,
+                      }
+                    : {
+                        clipPath: "circle(0% at 50% 50%)",
+                        WebkitClipPath: "circle(0% at 50% 50%)",
+                        opacity: 0,
+                      }
+                  : undefined
+              }
+              transition={{ duration: 1.5, ease: EASE }}
             >
-              <span className="sr-only">Work</span>
-              {LETTERS.map((letter, i) => (
-                <Letter key={i} config={letter} progress={mobileProgress} />
-              ))}
-            </h2>
+              <h2
+                className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
+                style={{
+                  fontSize: "32vw",
+                  letterSpacing: "-0.04em",
+                  fontOpticalSizing: "auto",
+                }}
+              >
+                <span className="sr-only">Work</span>
+                {LETTERS.map((letter, i) => (
+                  <Letter key={i} config={letter} progress={mobileProgress} />
+                ))}
+              </h2>
+            </motion.div>
           </div>
         </div>
 
         <div className="relative z-10 flex flex-col gap-6 px-[6vw] pt-[150vh] pb-[100vh]">
-          {projects.map((project) => (
-            <MobileProjectCard key={project.id} project={project} />
+          {featured.map((project, i) => (
+            <MobileProjectCard
+              key={project.id}
+              project={project}
+              displayId={featuredDisplayId(i)}
+            />
           ))}
+        </div>
+
+        {/* Pill lives in its own layer above the cards. Because position:sticky
+            creates a stacking context, keeping the pill in the WORK-text layer
+            trapped it below the cards' z-10, so taps never reached it. */}
+        <div className="pointer-events-none absolute inset-0 z-20">
+          <div className="sticky top-0 h-screen w-full">
+            <MobileViewAllPill progress={mobileProgress} />
+          </div>
         </div>
       </section>
 
@@ -325,26 +518,57 @@ export function Act3() {
         aria-hidden
       >
         <div className="sticky top-0 flex h-screen w-full items-center overflow-hidden">
-          <h2
-            className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
-            style={{
-              fontSize: "32vw",
-              letterSpacing: "-0.04em",
-              fontOpticalSizing: "auto",
-            }}
+          <motion.div
+            className="w-full"
+            style={{ willChange: "clip-path, opacity" }}
+            initial={
+              isReturn
+                ? {
+                    clipPath: "circle(0% at 50% 50%)",
+                    WebkitClipPath: "circle(0% at 50% 50%)",
+                    opacity: 0,
+                  }
+                : false
+            }
+            animate={
+              isReturn
+                ? revealText
+                  ? {
+                      clipPath: "circle(150% at 50% 50%)",
+                      WebkitClipPath: "circle(150% at 50% 50%)",
+                      opacity: 1,
+                    }
+                  : {
+                      clipPath: "circle(0% at 50% 50%)",
+                      WebkitClipPath: "circle(0% at 50% 50%)",
+                      opacity: 0,
+                    }
+                : undefined
+            }
+            transition={{ duration: 1.5, ease: EASE }}
           >
-            <span className="sr-only">Work</span>
-            {LETTERS.map((letter, i) => (
-              <Letter key={i} config={letter} progress={scrollYProgress} />
-            ))}
-          </h2>
+            <h2
+              className="relative z-0 flex w-full justify-between whitespace-nowrap font-display font-medium leading-none text-fg"
+              style={{
+                fontSize: "32vw",
+                letterSpacing: "-0.04em",
+                fontOpticalSizing: "auto",
+              }}
+            >
+              <span className="sr-only">Work</span>
+              {LETTERS.map((letter, i) => (
+                <Letter key={i} config={letter} progress={scrollYProgress} />
+              ))}
+            </h2>
+          </motion.div>
 
           <div className="pointer-events-none absolute inset-0 z-10">
             <div className="pointer-events-auto relative mx-auto h-full w-full">
-              {projects.map((project, i) => (
+              {featured.map((project, i) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
+                  displayId={featuredDisplayId(i)}
                   window={CARD_WINDOWS[i]}
                   progress={scrollYProgress}
                 />
@@ -354,6 +578,62 @@ export function Act3() {
           </div>
         </div>
       </section>
+
+      {returnWipe &&
+        createPortal(
+          <motion.div
+            className="fixed z-[9998]"
+            style={{
+              background: "var(--bg)",
+              borderStyle: "solid",
+              borderWidth: 2,
+            }}
+            initial={{
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              borderRadius: 0,
+              borderColor: "rgba(15, 14, 20, 0)",
+              opacity: 1,
+            }}
+            animate={
+              returnTarget
+                ? {
+                    top: returnTarget.top,
+                    left: returnTarget.left,
+                    width: returnTarget.width,
+                    height: returnTarget.height,
+                    borderRadius: 999,
+                    borderColor: returnDone
+                      ? "rgba(15, 14, 20, 0.65)"
+                      : [
+                          "rgba(15, 14, 20, 0)",
+                          "rgba(15, 14, 20, 0.65)",
+                          "rgba(15, 14, 20, 0.65)",
+                        ],
+                    opacity: returnDone ? 0 : 1,
+                  }
+                : undefined
+            }
+            transition={{
+              duration: 0.25,
+              ease: "easeInOut",
+              borderColor: { duration: 0.1, times: [0, 0.2, 1] },
+              opacity: { duration: 0.05, ease: "linear" },
+            }}
+            onAnimationComplete={() => {
+              if (returnDone) {
+                // Pill is fully revealed — now grow the WORK text out of it.
+                setReturnWipe(false);
+                setRevealText(true);
+              } else {
+                setReturnDone(true);
+              }
+            }}
+          />,
+          document.body,
+        )}
     </>
   );
 }

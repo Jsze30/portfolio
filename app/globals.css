@@ -4,7 +4,8 @@
   --bg: #f5f4f0;
   --fg: #0f0e14;
   --fg-muted: #6b6878;
-  --accent: #2d2a52;
+  --accent: #ff6b4a;
+  --accent-glow: rgba(255, 107, 74, 0.55);
   --rule: #dcdad3;
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);

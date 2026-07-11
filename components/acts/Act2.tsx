@@ -105,7 +105,7 @@ function Half({
                 letterSpacing: "0.01em",
                 lineHeight: 1.5,
                 marginBottom: "1.6vw",
-                maxWidth: "24vw",
+                maxWidth: "26vw",
                 textAlign: "right",
               }}
               className="font-light text-fg-muted"
@@ -273,7 +273,7 @@ function MobileHalf({
 const CREATOR_TEXT =
   "I create for the sake of creating. All my work serves the purpose of sharing my knowledge with the world and helping people become the best versions of themselves.";
 const CODER_TEXT =
-  "I focus on creating code that's functional, maintainable, and scalable. I treat my work as a craft and strive to create digital experiences that look good and feel good.";
+  "I focus on creating code that's functional, maintainable, and scalable. I treat my work as a craft and strive to create digital experiences that feel as good as they function.";
 
 function MobileAct2() {
   const ref = useRef<HTMLElement>(null);
@@ -286,7 +286,7 @@ function MobileAct2() {
     <section
       id="about"
       ref={ref}
-      className="relative z-10 block h-[300vh] w-full md:hidden"
+      className="pointer-events-none relative z-10 block h-[300vh] w-full md:hidden"
       aria-label="Creator and Coder"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
@@ -320,7 +320,7 @@ export function Act2() {
       <section
         id="about"
         ref={ref}
-        className="relative z-10 hidden h-[300vh] w-full md:block"
+        className="pointer-events-none relative z-10 hidden h-[300vh] w-full md:block"
         aria-label="Creator and Coder"
       >
         <div className="sticky top-0 h-screen w-full overflow-hidden">

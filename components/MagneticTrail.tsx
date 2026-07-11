@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 
 const DOT_COUNT = 20;
-const ACCENT = "#ff6b4a";
-const GLOW = "rgba(255, 107, 74, 0.55)";
+const ACCENT = "var(--accent)";
+const GLOW = "var(--accent-glow)";
 const HOVER_SELECTOR = 'a, button, [role="button"], [data-cursor]';
 
 export function MagneticTrail() {
@@ -18,6 +18,7 @@ export function MagneticTrail() {
   );
   const visible = useRef(false);
   const hoveredEl = useRef<Element | null>(null);
+  const cursorHidden = useRef(false);
 
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
@@ -35,6 +36,10 @@ export function MagneticTrail() {
       let hover = t?.closest?.(HOVER_SELECTOR) ?? null;
       if (hover && hover.closest("[data-no-cursor]")) hover = null;
       hoveredEl.current = hover;
+      // Elements marked data-cursor-hide replace the cursor with their own
+      // affordance (e.g. the live/devpost tip on /work rows). Interactive
+      // elements inside them still get the ring.
+      cursorHidden.current = !hover && !!t?.closest?.("[data-cursor-hide]");
     };
 
     const onLeave = () => {
@@ -48,8 +53,9 @@ export function MagneticTrail() {
 
     let raf = 0;
     const tick = () => {
-      // Trail dots — hidden when hovering an interactive element
-      const trailHidden = !!hoveredEl.current;
+      // Trail dots — hidden when hovering an interactive element or an
+      // element that replaces the cursor (data-cursor-hide)
+      const trailHidden = !!hoveredEl.current || cursorHidden.current;
       let px = target.current.x;
       let py = target.current.y;
       for (let i = 0; i < DOT_COUNT; i++) {
@@ -98,6 +104,7 @@ export function MagneticTrail() {
         ringRef.current.style.width = `${ringPos.current.w}px`;
         ringRef.current.style.height = `${ringPos.current.h}px`;
         ringRef.current.style.borderRadius = `${ringPos.current.r}px`;
+        ringRef.current.style.opacity = cursorHidden.current ? "0" : "1";
       }
 
       raf = requestAnimationFrame(tick);
