@@ -20,7 +20,6 @@
 
   --font-display: var(--font-bodoni), ui-serif, Georgia, serif;
   --font-body: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
 html,

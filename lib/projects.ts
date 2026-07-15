@@ -170,6 +170,7 @@ export const projects: Project[] = [
     featured: false,
     screenshot: "",
     links: {
+      primary: "https://uplift-mu-ecru.vercel.app/",
       github: "https://github.com/Jsze30/marketing-optimization-platform",
     },
   },
