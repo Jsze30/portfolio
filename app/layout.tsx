@@ -17,8 +17,21 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://szejason.com"),
   title: "Jason Sze",
   description: "Computer science @ UIUC. Portfolio.",
+  openGraph: {
+    title: "Jason Sze",
+    description: "Computer science @ UIUC. Portfolio.",
+    url: "https://szejason.com",
+    siteName: "Jason Sze",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Jason Sze",
+    description: "Computer science @ UIUC. Portfolio.",
+  },
 };
 
 export default function RootLayout({
