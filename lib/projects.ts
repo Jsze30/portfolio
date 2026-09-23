@@ -60,17 +60,16 @@ export const projects: Project[] = [
   },
   {
     id: "04",
-    title: "ContextLint",
-    category: "AI Context Linter",
+    title: "Friday",
+    category: "macOS Voice Assistant",
     description:
-      "Turns messy docs into Alignbase-shaped context entries — atomizes, classifies, dedupes, and lints Notion exports.",
-    tags: ["Next.js", "TypeScript", "AI"],
+      "A menu-bar voice assistant that wakes on a local wake word and talks through a LiveKit cloud agent — local capabilities never leave the Mac.",
+    tags: ["Python", "Swift", "LiveKit"],
     year: 2026,
     featured: false,
     screenshot: "",
     links: {
-      primary: "https://contextlint.vercel.app/",
-      github: "https://github.com/Jsze30/ContextLint",
+      github: "https://github.com/Jsze30/Friday",
     },
   },
   {
@@ -104,6 +103,36 @@ export const projects: Project[] = [
   },
   {
     id: "07",
+    title: "LegalIntake",
+    category: "AI Legal Intake",
+    description:
+      "Transcript review for legal intake calls — uploads call transcripts, extracts normalized facts with AI, and surfaces each with supporting evidence.",
+    tags: ["React", "TypeScript", "OpenAI"],
+    year: 2026,
+    featured: false,
+    screenshot: "",
+    links: {
+      primary: "https://finch-intake-demo.vercel.app/",
+      github: "https://github.com/Jsze30/Finch_Intake",
+    },
+  },
+  {
+    id: "08",
+    title: "ContextLint",
+    category: "AI Context Linter",
+    description:
+      "Turns messy docs into Alignbase-shaped context entries — atomizes, classifies, dedupes, and lints Notion exports.",
+    tags: ["Next.js", "TypeScript", "AI"],
+    year: 2026,
+    featured: false,
+    screenshot: "",
+    links: {
+      primary: "https://contextlint.vercel.app/",
+      github: "https://github.com/Jsze30/ContextLint",
+    },
+  },
+  {
+    id: "09",
     title: "Life Tracker",
     category: "Personal Productivity",
     description:
@@ -118,7 +147,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "08",
+    id: "10",
     title: "Content Scheduler",
     category: "X Post Scheduler",
     description:
@@ -132,21 +161,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "09",
-    title: "Friday",
-    category: "macOS Voice Assistant",
-    description:
-      "A menu-bar voice assistant that wakes on a local wake word and talks through a LiveKit cloud agent — local capabilities never leave the Mac.",
-    tags: ["Python", "Swift", "LiveKit"],
-    year: 2026,
-    featured: false,
-    screenshot: "",
-    links: {
-      github: "https://github.com/Jsze30/Friday",
-    },
-  },
-  {
-    id: "10",
+    id: "11",
     title: "Portfolio",
     category: "Personal Website",
     description:
@@ -160,7 +175,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "11",
+    id: "12",
     title: "Uplift",
     category: "ML Ads Optimizer",
     description:
@@ -175,7 +190,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "12",
+    id: "13",
     title: "Tennis Predictor",
     category: "Elo Prediction Model",
     description:
