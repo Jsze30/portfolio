@@ -45,6 +45,19 @@ export const projects: Project[] = [
   },
   {
     id: "03",
+    title: "Match Point",
+    category: "Tennis Video Game",
+    description: "Tennis Video Game",
+    tags: [],
+    year: 2026,
+    featured: false,
+    screenshot: "",
+    links: {
+      primary: "https://trytennis.vercel.app/",
+    },
+  },
+  {
+    id: "04",
     title: "Learnable",
     category: "AI Video Lectures",
     description:
@@ -59,7 +72,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "04",
+    id: "05",
     title: "Friday",
     category: "macOS Voice Assistant",
     description:
@@ -73,7 +86,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "05",
+    id: "06",
     title: "ProfitPilot",
     category: "AI CFO Agent",
     description:
@@ -88,7 +101,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "06",
+    id: "07",
     title: "NotWhisprFlow",
     category: "macOS Dictation App",
     description:
@@ -102,7 +115,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "07",
+    id: "08",
     title: "LegalIntake",
     category: "AI Legal Intake",
     description:
@@ -117,7 +130,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "08",
+    id: "09",
     title: "ContextLint",
     category: "AI Context Linter",
     description:
@@ -132,7 +145,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "09",
+    id: "10",
     title: "Life Tracker",
     category: "Personal Productivity",
     description:
@@ -147,7 +160,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "10",
+    id: "11",
     title: "Content Scheduler",
     category: "X Post Scheduler",
     description:
@@ -161,7 +174,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "11",
+    id: "12",
     title: "Portfolio",
     category: "Personal Website",
     description:
@@ -175,7 +188,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "12",
+    id: "13",
     title: "Uplift",
     category: "ML Ads Optimizer",
     description:
@@ -190,7 +203,7 @@ export const projects: Project[] = [
     },
   },
   {
-    id: "13",
+    id: "14",
     title: "Tennis Predictor",
     category: "Elo Prediction Model",
     description:

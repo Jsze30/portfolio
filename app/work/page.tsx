@@ -124,7 +124,7 @@ function WorkRow({
           {project.id}
         </span>
         <h2
-          className="min-w-0 truncate font-display font-medium text-fg transition-colors duration-300 group-hover:text-accent"
+          className="min-w-0 truncate pb-[0.2em] -mb-[0.2em] font-display font-medium text-fg transition-colors duration-300 group-hover:text-accent"
           style={{
             fontSize: "clamp(1.75rem, 4vw, 3.5rem)",
             letterSpacing: "-0.02em",

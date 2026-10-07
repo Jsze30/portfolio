@@ -204,7 +204,7 @@ function MobileProjectCard({
             {displayId}
           </span>
           <h3
-            className="min-w-0 truncate font-display font-medium text-fg"
+            className="min-w-0 truncate pb-[0.2em] -mb-[0.2em] font-display font-medium text-fg"
             style={{
               fontSize: "clamp(1.25rem, 5vw, 1.75rem)",
               letterSpacing: "-0.02em",
